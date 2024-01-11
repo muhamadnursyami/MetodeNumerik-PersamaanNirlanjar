@@ -1,0 +1,81 @@
+def persamaan(t):
+    """
+    Fungsi ini mendefinisikan persamaan yang ingin diselesaikan.
+    """
+    return 2 * t**3 + 5 * t**2 - 10 * t - 4
+1
+def metode_bagi_dua(func, a, b, tol=0.001, max_iter=100):
+    """
+    Metode Bagi Dua digunakan untuk mencari akar persamaan dalam interval [a, b].
+
+    Parameters:
+    - func (fungsi): Fungsi persamaan yang ingin diselesaikan.
+    - a (float): Batas bawah interval.
+    - b (float): Batas atas interval.
+    - tol (float): Toleransi galat yang diinginkan.
+    - max_iter (int): Jumlah maksimum iterasi.
+
+    Returns:
+    - float: Estimasi akar persamaan.
+    """
+    if func(a) * func(b) > 0:
+        raise ValueError("Tidak dapat menentukan akar karena f(a) dan f(b) memiliki tanda yang sama.")
+    
+    for i in range(max_iter):
+        c = (a + b) / 2
+        if abs(b - a) < tol or func(c) == 0:
+            return c
+
+        if func(c) * func(a) < 0:
+            b = c
+        else:
+            a = c
+        
+    raise ValueError("Metode Bagi Dua tidak konvergen dalam jumlah iterasi yang ditentukan.")
+
+def metode_regula_falsi(func, a, b, tol=0.001, max_iter=100):
+    """
+    Metode Regula Falsi digunakan untuk mencari akar persamaan dalam interval [a, b].
+
+    Parameters:
+    - func (fungsi): Fungsi persamaan yang ingin diselesaikan.
+    - a (float): Batas bawah interval.
+    - b (float): Batas atas interval.
+    - tol (float): Toleransi galat yang diinginkan.
+    - max_iter (int): Jumlah maksimum iterasi.
+
+    Returns:
+    - float: Estimasi akar persamaan.
+    """
+    if func(a) * func(b) > 0:
+        raise ValueError("Nilai fungsi pada ujung interval harus memiliki tanda yang berlawanan.")
+    
+    for i in range(max_iter):
+        c = (a * func(b) - b * func(a)) / (func(b) - func(a))
+        if abs(func(c)) < tol:
+            return c
+
+        if func(c) * func(a) < 0:
+            b = c
+        else:
+            a = c
+    
+    raise ValueError("Metode Regula Falsi tidak konvergen dalam jumlah iterasi yang ditentukan.")
+
+# Input nilai awal dan akhir
+a = float(input("Masukkan nilai awal (a): "))
+b = float(input("Masukkan nilai akhir (b): "))
+
+# Solve menggunakan Metode Bagi Dua
+try:
+    hasil_bagi_dua = metode_bagi_dua(persamaan, a, b)
+    print(f"Hasil Metode Bagi Dua: {hasil_bagi_dua}")
+except ValueError as e:
+    print(e)
+
+# Solve menggunakan Metode Regula Falsi
+try:
+    hasil_regula_falsi = metode_regula_falsi(persamaan, a, b)
+    print(f"Hasil Metode Regula Falsi: {hasil_regula_falsi}")
+except ValueError as e:
+    print(e)
